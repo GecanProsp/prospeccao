@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Prospecção de Imóveis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        :root {
+            --bg-page: #f4f6fb;
+            --bg-card: #ffffff;
+            --primary: #1f6feb;
+            --primary-dark: #154b9e;
+            --border: #d0d7de;
+            --text-main: #1f2328;
+            --text-muted: #6e7781;
+            --danger: #d1242f;
+            --radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: var(--bg-page);
+            color: var(--text-main);
+        }
+
+        .page {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 24px 16px;
+        }
+
+        .form-card {
+            background: var(--bg-card);
+            width: 100%;
+            max-width: 720px;
+            border-radius: var(--radius);
+            padding: 24px 20px 28px;
+            box-shadow: 0 18px 45px rgba(15, 23, 42, 0.09);
+        }
+
+        .form-header {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+            margin-bottom: 20px;
+        }
+
+        .form-header h1 {
+            margin: 0 0 4px;
+            font-size: 1.5rem;
+        }
+
+        .form-header .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .form-header .subtitle strong {
+            font-weight: 600;
+        }
+
+        .required-note {
+            margin-top: 8px;
+            font-size: 0.85rem;
+            color: var(--danger);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .help-text {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .required-badge {
+            color: var(--danger);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 4px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="file"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font: inherit;
+            outline: none;
+            transition: border-color 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+            background-color: #f9fafb;
+        }
+
+        input[type="file"] {
+            padding: 7px 12px;
+            background-color: #f9fafb;
+        }
+
+        textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(31, 111, 235, 0.15);
+            background-color: #ffffff;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #9ca3af;
+        }
+
+        .inline-fields {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .inline-fields .form-group {
+            flex: 1 1 160px;
+            margin-bottom: 0;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 4px;
+        }
+
+        .radio-group label {
+            font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .file-info {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .section-title {
+            margin-top: 24px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-main);
+        }
+
+        .form-footer {
+            margin-top: 24px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        button[type="submit"] {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 24px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            background: var(--primary);
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 10px 20px rgba(31, 111, 235, 0.35);
+            transition: background 0.15s ease, transform 0.08s ease, box-shadow 0.15s ease;
+        }
+
+        button[type="submit"]:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 14px 30px rgba(31, 111, 235, 0.45);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+            box-shadow: 0 8px 18px rgba(31, 111, 235, 0.35);
+        }
+
+        @media (max-width: 600px) {
+            .form-card {
+                padding: 18px 14px 22px;
+                border-radius: 10px;
+            }
+
+            .form-header h1 {
+                font-size: 1.3rem;
+            }
+
+            .inline-fields {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="form-card">
+        <header class="form-header">
+            <h1>Prospecção</h1>
+            <p class="subtitle">
+                Olá, Andrey. Quando você enviar este formulário, o proprietário verá seu nome e endereço de email.
+            </p>
+            <p class="required-note">Campos marcados com <span class="required-badge">*</span> são obrigatórios.</p>
+        </header>
+
+        <form action="#" method="post" enctype="multipart/form-data">
+            <!-- 1. Imóvel -->
+            <div class="form-group">
+                <label for="imovel">1. Imóvel <span class="required-badge">*</span></label>
+                <div class="help-text">Adicionar um número ou referência (ex.: 01 ou Casa Branca)</div>
+                <input type="text" id="imovel" name="imovel" placeholder="Ex.: 01 ou Casa Branca" required>
+            </div>
+
+            <!-- 2. Estado + 3. Cidade -->
+            <div class="inline-fields">
+                <div class="form-group">
+                    <label for="estado">2. Estado <span class="required-badge">*</span></label>
+                    <select id="estado" name="estado" required>
+                        <option value="">Selecionar sua resposta</option>
+                        <option value="AC">AC</option>
+                        <option value="AL">AL</option>
+                        <option value="AP">AP</option>
+                        <option value="AM">AM</option>
+                        <option value="BA">BA</option>
+                        <option value="CE">CE</option>
+                        <option value="DF">DF</option>
+                        <option value="ES">ES</option>
+                        <option value="GO">GO</option>
+                        <option value="MA">MA</option>
+                        <option value="MT">MT</option>
+                        <option value="MS">MS</option>
+                        <option value="MG">MG</option>
+                        <option value="PA">PA</option>
+                        <option value="PB">PB</option>
+                        <option value="PR">PR</option>
+                        <option value="PE">PE</option>
+                        <option value="PI">PI</option>
+                        <option value="RJ">RJ</option>
+                        <option value="RN">RN</option>
+                        <option value="RS">RS</option>
+                        <option value="RO">RO</option>
+                        <option value="RR">RR</option>
+                        <option value="SC">SC</option>
+                        <option value="SP">SP</option>
+                        <option value="SE">SE</option>
+                        <option value="TO">TO</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="cidade">3. Cidade <span class="required-badge">*</span></label>
+                    <input type="text" id="cidade" name="cidade" placeholder="Digite a cidade" required>
+                </div>
+            </div>
+
+            <!-- 4. Bairro -->
+            <div class="form-group">
+                <label for="bairro">4. Bairro <span class="required-badge">*</span></label>
+                <input type="text" id="bairro" name="bairro" placeholder="Digite o bairro" required>
+            </div>
+
+            <!-- 5. Endereço -->
+            <div class="form-group">
+                <label for="endereco">5. Endereço <span class="required-badge">*</span></label>
+                <input type="text" id="endereco" name="endereco" placeholder="Rua, número, complemento" required>
+            </div>
+
+            <!-- 6. CEP + 7. Data da visita -->
+            <div class="inline-fields">
+                <div class="form-group">
+                    <label for="cep">6. CEP <span class="required-badge">*</span></label>
+                    <div class="help-text">Formato: 00000-000</div>
+                    <input type="text" id="cep" name="cep" placeholder="00000-000" pattern="^\d{5}-?\d{3}$" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="data_visita">7. Data da visita <span class="required-badge">*</span></label>
+                    <div class="help-text">Insira a data (dd/MM/yyyy)</div>
+                    <input type="date" id="data_visita" name="data_visita" required>
+                </div>
+            </div>
+
+            <!-- 8. Área -->
+            <div class="form-group">
+                <label for="area">8. Área (m²) <span class="required-badge">*</span></label>
+                <div class="help-text">Com duas casas decimais. Ex: 300,00</div>
+                <input type="number" id="area" name="area" step="0.01" min="0" placeholder="Ex.: 300.00" required>
+            </div>
+
+            <!-- 9. Observações Imóvel -->
+            <div class="form-group">
+                <label for="obs_imovel">9. Observações Imóvel</label>
+                <textarea id="obs_imovel" name="obs_imovel" placeholder="Insira suas observações"></textarea>
+            </div>
+
+            <!-- 10. Nome / 11. Contato corretor -->
+            <div class="inline-fields">
+                <div class="form-group">
+                    <label for="nome_corretor">10. Nome do corretor <span class="required-badge">*</span></label>
+                    <input type="text" id="nome_corretor" name="nome_corretor" placeholder="Nome completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="contato_corretor">11. Contato do corretor <span class="required-badge">*</span></label>
+                    <div class="help-text">Formato: (XX) XXXX-XXXX ou (XX) 9XXXX-XXXX</div>
+                    <input type="tel" id="contato_corretor" name="contato_corretor"
+                           placeholder="(61) 99999-9999"
+                           pattern="^\(\d{2}\)\s?\d{4,5}-\d{4}$"
+                           required>
+                </div>
+            </div>
+
+            <!-- 12. Matrícula -->
+            <div class="form-group">
+                <label for="matricula">12. Matrícula do imóvel</label>
+                <input type="text" id="matricula" name="matricula" placeholder="Informe a matrícula, se disponível">
+            </div>
+
+            <!-- 13. Tipo de acabamento -->
+            <div class="form-group">
+                <label for="tipo_acabamento">13. Tipo de acabamento</label>
+                <select id="tipo_acabamento" name="tipo_acabamento">
+                    <option value="">Selecionar sua resposta</option>
+                    <option value="simples">Simples</option>
+                    <option value="padrao">Padrão</option>
+                    <option value="bom">Bom</option>
+                    <option value="alto_padrao">Alto padrão</option>
+                    <option value="luxo">Luxo</option>
+                </select>
+            </div>
+
+            <!-- 14. Situação -->
+            <div class="form-group">
+                <label>14. Situação <span class="required-badge">*</span></label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="situacao" value="ativo" required> Ativo
+                    </label>
+                    <label>
+                        <input type="radio" name="situacao" value="descartado"> Descartado
+                    </label>
+                </div>
+            </div>
+
+            <div class="section-title">Arquivos e mídia</div>
+
+            <!-- 15. Fotos -->
+            <div class="form-group">
+                <label for="fotos_imovel">15. Fotos do imóvel</label>
+                <div class="help-text">Carregar arquivo (pergunta não anônima)</div>
+                <input type="file" id="fotos_imovel" name="fotos_imovel[]" multiple
+                       accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,image/*,video/*,audio/*">
+                <div class="file-info">
+                    Limite de número de arquivos: 10<br>
+                    Limite de tamanho de arquivo único: 1GB*<br>
+                    Tipos de arquivo permitidos: Word, Excel, PPT, PDF, Imagem, Vídeo, Áudio<br>
+                    <em>*O limite real depende da configuração do servidor.</em>
+                </div>
+            </div>
+
+            <!-- 16. Observações sobre fotos -->
+            <div class="form-group">
+                <label for="obs_fotos">16. Observações sobre fotos</label>
+                <textarea id="obs_fotos" name="obs_fotos" placeholder="Insira observações sobre as fotos, se necessário"></textarea>
+            </div>
+
+            <!-- 17. Arquivos de interesse -->
+            <div class="form-group">
+                <label for="arquivos_interesse">17. Arquivos de interesse</label>
+                <div class="help-text">Ex.: planta, registro, escritura (pergunta não anônima)</div>
+                <input type="file" id="arquivos_interesse" name="arquivos_interesse[]" multiple
+                       accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,image/*,video/*,audio/*">
+                <div class="file-info">
+                    Limite de número de arquivos: 10<br>
+                    Limite de tamanho de arquivo único: 1GB*<br>
+                    Tipos de arquivo permitidos: Word, Excel, PPT, PDF, Imagem, Vídeo, Áudio
+                </div>
+            </div>
+
+            <!-- 18. Descrição dos arquivos -->
+            <div class="form-group">
+                <label for="desc_arquivos">18. Descrição dos arquivos e observações</label>
+                <textarea id="desc_arquivos" name="desc_arquivos"
+                          placeholder="Descreva os arquivos enviados e observações relevantes"></textarea>
+            </div>
+
+            <!-- 19. Valor aluguel -->
+            <div class="form-group">
+                <label for="valor_aluguel">19. Valor aluguel (R$)</label>
+                <div class="help-text">Com duas casas decimais. Ex: 25000.00</div>
+                <input type="number" id="valor_aluguel" name="valor_aluguel" step="0.01" min="0"
+                       placeholder="Ex.: 25000.00">
+            </div>
+
+            <div class="form-footer">
+                <button type="submit">
+                    Enviar formulário
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
